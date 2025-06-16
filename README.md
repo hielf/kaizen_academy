@@ -1,24 +1,53 @@
-# README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
+Kaizen Academy is a Ruby on Rails application designed to provide a platform for continuous improvement and learning. The project is set up with the following features and configurations:
 
-* Ruby version
+- **Rails Version**: 8.0.2
+- **Database**: SQLite3
+- **Testing Framework**: RSpec
 
-* System dependencies
+## System Initial Instructions
 
-* Configuration
+### Prerequisites
 
-* Database creation
+- Ruby 3.4.4
+- Rails 8.0.2
+- SQLite3
 
-* Database initialization
+### Installation
 
-* How to run the test suite
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd kaizen_academy
+   ```
 
-* Services (job queues, cache servers, search engines, etc.)
+2. Install dependencies:
+   ```bash
+   bundle install
+   ```
 
-* Deployment instructions
+3. Set up the database:
+   ```bash
+   rails db:create
+   rails db:migrate
+   ```
 
-* ...
+4. Start the Rails server:
+   ```bash
+   rails s
+   ```
+
+5. Open your browser and navigate to `http://localhost:3000` to view the application.
+
+### Running Tests
+
+To run the tests using RSpec, execute the following command:
+```bash
+rspec
+```
+
+### Additional Information
+
+For more information or assistance, please refer to the project documentation or contact the development team.
+
