@@ -84,3 +84,6 @@ Thumbs.db
 *.sqlite3
 kaizen_academy_development.sqlite3-wal
 kaizen_academy_development.sqlite3-shm
+
+/app/assets/builds/*
+!/app/assets/builds/.keep

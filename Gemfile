@@ -17,6 +17,12 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
+# Use Tailwind CSS for styling
+gem "tailwindcss-rails"
+
+# Hotwire
+gem "hotwire-rails"
+
 gem 'devise'
 gem 'pundit'
 
