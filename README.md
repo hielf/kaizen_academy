@@ -1,5 +1,3 @@
-
-
 Kaizen Academy is a Ruby on Rails application designed to provide a platform for continuous improvement and learning. The project is set up with the following features and configurations:
 
 - **Rails Version**: 8.0.2
@@ -49,5 +47,5 @@ rspec
 
 ### Additional Information
 
-For more information or assistance, please refer to the project documentation or contact the development team.
+ [Domain Models](DOMAIN_MODELS.md).
 
