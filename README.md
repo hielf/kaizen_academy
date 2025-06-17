@@ -47,5 +47,5 @@ rspec
 
 ### Additional Information
 
- [Domain Models](DOMAIN_MODELS.md).
+ [Domain Models](DOMAIN_MODELS.md)
 
