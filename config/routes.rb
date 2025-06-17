@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  devise_for :users
+  # Devise routes for Users (which includes Student and Admin via STI)
+  devise_for :users, controllers: {
+    registrations: 'users/registrations', # Optional: if you want custom Devise controllers
+    sessions: 'users/sessions'           # Optional: if you want custom Devise controllers
+  }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -12,6 +16,9 @@ Rails.application.routes.draw do
 
   # Define the root route
   root to: "home#index"
+
+  get '/admin/dashboard', to: 'admin_dashboards#show', as: :admin_dashboard
+  get '/student/dashboard', to: 'student_dashboards#show', as: :student_dashboard
 
   match "/404", to: "errors#not_found", via: :all
   match "/500", to: "errors#internal_server_error", via: :all

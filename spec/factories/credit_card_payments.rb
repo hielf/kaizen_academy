@@ -1,8 +1,8 @@
 FactoryBot.define do
-  factory :credit_card_payment do
-    last_four { "MyString" }
-    expiry_date { "MyString" }
-    card_type { "MyString" }
-    processed_at { "2025-06-16 23:40:55" }
+  factory :credit_card_payment, class: 'CreditCardPayment' do
+    last_four { '4242' } # Common test card last 4 digits
+    expiry_date { '12/25' } # Valid future date
+    card_type { 'Visa' }
+    processed_at { Time.zone.now }
   end
 end

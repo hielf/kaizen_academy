@@ -6,12 +6,20 @@ class CreditCardPayment < ApplicationRecord
   validates :last_four, presence: true, format: { with: /\A\d{4}\z/, message: "must be 4 digits" }
   validates :expiry_date, presence: true, format: { with: /\A(0[1-9]|1[0-2])\/\d{2}\z/, message: "must be in MM/YY format" }
   validates :card_type, presence: true # e.g., Visa, Mastercard
-  validates :processed_at, presence: true, default: -> { 'NOW()' } # When payment was processed
+  validates :processed_at, presence: true # When payment was processed
+
+  before_validation :set_processed_at, if: -> { processed_at.nil? }
 
   # Simulate payment processing success
   def process_payment!
     # this would interact with a payment gateway in the future
     update(processed_at: Time.zone.now) if processed_at.nil?
     true # Assume success
+  end
+
+  private
+
+  def set_processed_at
+    self.processed_at = Time.zone.now
   end
 end

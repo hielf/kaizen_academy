@@ -82,3 +82,5 @@ Thumbs.db
 
 # Ignore all .sqlite3 files
 *.sqlite3
+kaizen_academy_development.sqlite3-wal
+kaizen_academy_development.sqlite3-shm
