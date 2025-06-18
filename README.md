@@ -29,6 +29,7 @@ Kaizen Academy is a Ruby on Rails application designed to provide a platform for
    ```bash
    rails db:create
    rails db:migrate
+   rails db:seed
    ```
 
 4. Start the Rails server:
