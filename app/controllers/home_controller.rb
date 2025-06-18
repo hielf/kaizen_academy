@@ -1,5 +1,7 @@
 class HomeController < ApplicationController
   def index
-    # This action can be left empty if you don't need any specific logic here.
+    if user_signed_in? && current_user.admin?
+      @schools = School.all.order(:name)
+    end
   end
 end 

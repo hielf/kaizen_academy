@@ -1,0 +1,46 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold"><%= @school.name %></h1>
+    <div>
+      <%= link_to 'Manage Terms', admin_school_terms_path(@school), class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2' %>
+      <%= link_to 'Edit', edit_admin_school_path(@school), class: 'bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mr-2' %>
+      <%= link_to 'Back to Schools', admin_schools_path, class: 'bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded' %>
+    </div>
+  </div>
+
+  <% if notice %>
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+      <span class="block sm:inline"><%= notice %></span>
+    </div>
+  <% end %>
+
+  <div class="bg-white shadow-md rounded p-6">
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold mb-4">School Details</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <p class="text-gray-600">Name:</p>
+          <p class="font-medium"><%= @school.name %></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold mb-4">Statistics</h2>
+      <div class="grid grid-cols-3 gap-4">
+        <div class="bg-gray-50 p-4 rounded">
+          <p class="text-gray-600">Total Students</p>
+          <p class="text-2xl font-bold"><%= @school.students.count %></p>
+        </div>
+        <div class="bg-gray-50 p-4 rounded">
+          <p class="text-gray-600">Total Courses</p>
+          <p class="text-2xl font-bold"><%= @school.courses.count %></p>
+        </div>
+        <div class="bg-gray-50 p-4 rounded">
+          <p class="text-gray-600">Total Terms</p>
+          <p class="text-2xl font-bold"><%= @school.terms.count %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

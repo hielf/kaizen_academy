@@ -17,6 +17,9 @@ class Term < ApplicationRecord
   # Ensure term names are unique per school
   validates :name, uniqueness: { scope: :school_id, message: "already exists for this school" }
 
+  has_many :enrollments, through: :courses
+  has_many :licenses, dependent: :destroy
+
   # Helper to check if the term is currently active
   def active?
     Time.zone.now.between?(start_date.beginning_of_day, end_date.end_of_day)

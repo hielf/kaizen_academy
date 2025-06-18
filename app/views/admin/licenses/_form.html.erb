@@ -1,0 +1,49 @@
+<%= form_with(model: [:admin, @school, @term, @license], class: "space-y-6") do |f| %>
+  <% if @license.errors.any? %>
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+      <h2 class="font-bold mb-2"><%= pluralize(@license.errors.count, "error") %> prohibited this license from being saved:</h2>
+      <ul class="list-disc list-inside">
+        <% @license.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :code, class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_field :code, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+  </div>
+
+  <div>
+    <%= f.label :status, class: "block text-sm font-medium text-gray-700" %>
+    <%= f.select :status, 
+        options_for_select([
+          ['Active', 'active'],
+          ['Redeemed', 'redeemed'],
+          ['Expired', 'expired'],
+          ['Invalid', 'invalid']
+        ], @license.status),
+        {},
+        class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+  </div>
+
+  <div class="bg-gray-50 p-4 rounded">
+    <h3 class="text-sm font-medium text-gray-700 mb-2">License Information</h3>
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <p class="text-sm text-gray-600">Issued At:</p>
+        <p class="text-sm font-medium"><%= @license.issued_at&.strftime("%B %d, %Y %H:%M") || "Will be set automatically" %></p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-600">Expires At:</p>
+        <p class="text-sm font-medium"><%= @license.expires_at&.strftime("%B %d, %Y %H:%M") || @term.end_date.end_of_day.strftime("%B %d, %Y %H:%M") %></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex justify-end space-x-4">
+    <%= link_to 'Cancel', admin_school_term_licenses_path(@school, @term), class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" %>
+    <%= f.submit class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+  </div>
+<% end %> 

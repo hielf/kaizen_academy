@@ -38,4 +38,26 @@ if Rails.env.development?
     s.status = 'active'
   end
   puts "Sample school created: #{school.name}"
+
+  # Create test student
+  student = Student.find_or_initialize_by(email: 'test@school.com') do |s|
+    s.password = '123456'
+    s.password_confirmation = '123456'
+    s.first_name = 'Test'
+    s.last_name = 'Student'
+    s.school = school
+  end
+
+  if student.new_record?
+    if student.save
+      puts "Test student created successfully!"
+      puts "Email: test@school.com"
+      puts "Password: 123456"
+    else
+      puts "Failed to create test student:"
+      puts student.errors.full_messages
+    end
+  else
+    puts "Test student already exists."
+  end
 end
