@@ -20,8 +20,8 @@ class Term < ApplicationRecord
   has_many :enrollments, through: :courses
   has_many :licenses, dependent: :destroy
 
-  # Helper to check if the term is currently active
-  def active?
-    Time.zone.now.between?(start_date.beginning_of_day, end_date.end_of_day)
+  # Helper to check if the term is currently available
+  def available?
+    end_date > Time.zone.now
   end
 end

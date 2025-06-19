@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
   # Devise routes for Users (which includes Student and Admin via STI)
   devise_for :users, controllers: {
-    registrations: 'users/registrations'
+    registrations: 'users/registrations',
+    sessions: 'users/sessions'
   }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -14,6 +15,9 @@ Rails.application.routes.draw do
 
   # Define the root route
   root to: "home#index"
+
+  # Student routes
+  resources :terms, only: [:show]
 
   # Admin routes
   namespace :admin do
@@ -29,8 +33,6 @@ Rails.application.routes.draw do
       end
     end
   end
-
-  get '/student/dashboard', to: 'student_dashboards#show', as: :student_dashboard
 
   match "/404", to: "errors#not_found", via: :all
   match "/500", to: "errors#internal_server_error", via: :all

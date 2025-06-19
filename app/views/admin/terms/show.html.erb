@@ -5,7 +5,7 @@
       <p class="text-gray-600 mt-2">Term details for <%= @school.name %></p>
     </div>
     <div class="flex space-x-4">
-      <%= link_to 'Courses', admin_school_term_courses_path(@school, @term), class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' %>
+      <%= link_to 'Manage Courses', admin_school_term_courses_path(@school, @term), class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' %>
       <%= link_to 'Edit', edit_admin_school_term_path(@school, @term), class: 'bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded' %>
       <%= link_to 'Back to Terms', admin_school_terms_path(@school), class: 'bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded' %>
     </div>
@@ -55,7 +55,6 @@
   <div class="bg-white shadow-md rounded p-6">
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-xl font-semibold">Licenses</h2>
-      <%= link_to 'New License', new_admin_school_term_license_path(@school, @term), class: 'bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded' %>
     </div>
 
     <div class="bg-white shadow-md rounded-lg overflow-hidden">

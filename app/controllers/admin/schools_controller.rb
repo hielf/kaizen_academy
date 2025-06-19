@@ -3,7 +3,7 @@ class Admin::SchoolsController < ApplicationController
   before_action :set_school, only: [:show, :edit, :update, :destroy]
 
   def index
-    @schools = School.all.order(:name)
+    @schools = policy_scope(School).order(:name)
     
     if params[:name_filter].present?
       @schools = @schools.where("name LIKE ?", "%#{params[:name_filter]}%")
@@ -11,17 +11,21 @@ class Admin::SchoolsController < ApplicationController
   end
 
   def show
+    authorize @school
   end
 
   def new
     @school = School.new
+    authorize @school
   end
 
   def edit
+    authorize @school
   end
 
   def create
     @school = School.new(school_params)
+    authorize @school
 
     if @school.save
       redirect_to admin_school_path(@school), notice: 'School was successfully created.'
@@ -31,6 +35,7 @@ class Admin::SchoolsController < ApplicationController
   end
 
   def update
+    authorize @school
     if @school.update(school_params)
       redirect_to admin_school_path(@school), notice: 'School was successfully updated.'
     else
@@ -39,6 +44,7 @@ class Admin::SchoolsController < ApplicationController
   end
 
   def destroy
+    authorize @school
     @school.destroy
     redirect_to admin_schools_path, notice: 'School was successfully deleted.'
   end

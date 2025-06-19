@@ -1,4 +1,8 @@
 class Users::RegistrationsController < Devise::RegistrationsController
+  # Skip Pundit authorization for Devise registrations
+  skip_after_action :verify_authorized
+  skip_after_action :verify_policy_scoped
+
   before_action :configure_sign_up_params, only: [:create]
   before_action :configure_account_update_params, only: [:update]
 

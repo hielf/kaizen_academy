@@ -1,23 +1,27 @@
 class Admin::LicensesController < ApplicationController
+  before_action :authenticate_admin!
   before_action :set_school
   before_action :set_term
   before_action :set_license, only: [:show, :edit, :update, :destroy]
 
   def index
-    @licenses = @term.licenses
+    @licenses = policy_scope(@term.licenses)
   end
 
   def show
+    authorize @license
   end
 
   def new
     @license = @term.licenses.build
+    authorize @license
   end
 
   def create
     @license = @term.licenses.build(license_params)
     @license.issued_at = Time.zone.now
     @license.expires_at = @term.end_date.end_of_day
+    authorize @license
 
     if @license.save
       redirect_to admin_school_term_license_path(@school, @term, @license), notice: 'License was successfully created.'
@@ -30,6 +34,7 @@ class Admin::LicensesController < ApplicationController
     @license = @term.licenses.build
     @license.issued_at = Time.zone.now
     @license.expires_at = 1.year.from_now
+    authorize @license, :generate?
 
     if @license.save
       redirect_to admin_school_term_path(@school, @term), notice: "License #{@license.code} was successfully generated."
@@ -39,9 +44,11 @@ class Admin::LicensesController < ApplicationController
   end
 
   def edit
+    authorize @license
   end
 
   def update
+    authorize @license
     if @license.update(license_params)
       redirect_to admin_school_term_license_path(@school, @term, @license), notice: 'License was successfully updated.'
     else
@@ -50,6 +57,7 @@ class Admin::LicensesController < ApplicationController
   end
 
   def destroy
+    authorize @license
     @license.destroy
     redirect_to admin_school_term_path(@school, @term), notice: 'License was successfully deleted.'
   end
@@ -58,10 +66,12 @@ class Admin::LicensesController < ApplicationController
 
   def set_school
     @school = School.find(params[:school_id])
+    # authorize @school
   end
 
   def set_term
     @term = @school.terms.find(params[:term_id])
+    # authorize @term
   end
 
   def set_license

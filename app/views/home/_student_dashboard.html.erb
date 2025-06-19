@@ -1,47 +1,29 @@
 <!-- Top Navigation Bar -->
-<nav class="bg-white shadow-md border-b border-gray-200">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between items-center h-16">
-      <!-- Left side: App name and greeting -->
-      <div class="flex items-center space-x-4">
-        <h1 class="text-xl font-bold text-gray-900">Kaizen Academy</h1>
-        <span class="text-gray-600">|</span>
-        <span class="text-gray-700">Hello, <%= current_user.first_name.presence || current_user.email %>!</span>
-      </div>
-      
-      <!-- Right side: Sign out -->
-      <div class="flex items-center">
-        <%= link_to 'Sign Out', destroy_user_session_path, 
-            data: { turbo_method: :delete }, 
-            class: 'bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200' %>
-      </div>
-    </div>
-  </div>
-</nav>
+<%= render 'shared/navigation', greeting: "Hello, #{@student.first_name.presence || @student.email}!" %>
 
 <!-- Main Content -->
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
   <!-- Welcome Section -->
   <div class="mb-8">
     <h2 class="text-3xl font-bold text-gray-900 mb-2">Student Dashboard</h2>
-    <p class="text-gray-600">Welcome to your learning portal at <%= current_user.school&.name || 'your school' %></p>
+    <p class="text-gray-600">Welcome to your learning portal at <%= @school&.name || 'your school' %></p>
   </div>
 
   <!-- Statistics Cards -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
     <div class="bg-white rounded-lg shadow-md p-6">
       <h3 class="text-lg font-semibold text-gray-900 mb-2">Active Enrollments</h3>
-      <p class="text-3xl font-bold text-blue-600"><%= current_user.enrollments.count %></p>
+      <p class="text-3xl font-bold text-blue-600"><%= @enrollments.count %></p>
     </div>
     
     <div class="bg-white rounded-lg shadow-md p-6">
       <h3 class="text-lg font-semibold text-gray-900 mb-2">Available Terms</h3>
-      <p class="text-3xl font-bold text-green-600"><%= current_user.school&.terms&.count || 0 %></p>
+      <p class="text-3xl font-bold text-green-600"><%= @terms&.count || 0 %></p>
     </div>
     
     <div class="bg-white rounded-lg shadow-md p-6">
       <h3 class="text-lg font-semibold text-gray-900 mb-2">Available Courses</h3>
-      <p class="text-3xl font-bold text-purple-600"><%= current_user.school&.courses&.count || 0 %></p>
+      <p class="text-3xl font-bold text-purple-600"><%= @courses&.count || 0 %></p>
     </div>
   </div>
 
@@ -49,23 +31,27 @@
   <div class="bg-white rounded-lg shadow-md p-6 mb-8">
     <h3 class="text-2xl font-bold text-gray-900 mb-6">Available Terms</h3>
     
-    <% if current_user.school&.terms&.any? %>
+    <% if @terms&.any? %>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <% current_user.school.terms.order(start_date: :desc).each do |term| %>
+        <% @terms.each do |term| %>
           <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
             <h4 class="text-lg font-semibold text-gray-900 mb-2"><%= term.name %></h4>
             <div class="text-sm text-gray-600 mb-3">
               <p><strong>Start:</strong> <%= term.start_date.strftime("%B %d, %Y") %></p>
               <p><strong>End:</strong> <%= term.end_date.strftime("%B %d, %Y") %></p>
               <p><strong>Status:</strong> 
-                <span class="<%= term.active? ? 'text-green-600' : 'text-gray-500' %>">
-                  <%= term.active? ? 'Active' : 'Inactive' %>
+                <span class="<%= term.available? ? 'text-green-600' : 'text-gray-500' %>">
+                  <%= term.available? ? 'Available' : 'Expired' %>
                 </span>
               </p>
             </div>
-            <div class="text-sm text-gray-500">
+            <div class="text-sm text-gray-500 mb-4">
               <p><%= term.courses.count %> courses available</p>
             </div>
+            <% if term.available? %>
+              <%= link_to 'Enroll Now', term_path(term), 
+                  class: 'inline-flex items-center justify-center w-full bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors transition-colors duration-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2' %>
+            <% end %>
           </div>
         <% end %>
       </div>
@@ -78,9 +64,9 @@
   <div class="bg-white rounded-lg shadow-md p-6 mb-8">
     <h3 class="text-2xl font-bold text-gray-900 mb-6">Available Courses</h3>
     
-    <% if current_user.school&.courses&.any? %>
+    <% if @courses&.any? %>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <% current_user.school.courses.includes(:term).order(:title).each do |course| %>
+        <% @courses.each do |course| %>
           <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
             <h4 class="text-lg font-semibold text-gray-900 mb-2"><%= course.title %></h4>
             <p class="text-sm text-gray-600 mb-3"><%= course.description %></p>
@@ -100,7 +86,7 @@
   <div class="bg-white rounded-lg shadow-md p-6">
     <h3 class="text-2xl font-bold text-gray-900 mb-6">My Enrollments</h3>
     
-    <% if current_user.enrollments.any? %>
+    <% if @enrollments.any? %>
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
@@ -112,7 +98,7 @@
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
-            <% current_user.enrollments.includes(:course, course: :term).order(created_at: :desc).each do |enrollment| %>
+            <% @enrollments.each do |enrollment| %>
               <tr>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="text-sm font-medium text-gray-900"><%= enrollment.course&.title || 'N/A' %></div>

@@ -3,7 +3,7 @@ class Admin::StudentsController < ApplicationController
   before_action :set_student, only: [:show, :destroy]
 
   def index
-    @students = Student.includes(:school).order(:email)
+    @students = policy_scope(Student).includes(:school).order(:email)
     
     if params[:name_filter].present?
       @students = @students.where("email LIKE ? OR first_name LIKE ? OR last_name LIKE ?", 
@@ -18,9 +18,11 @@ class Admin::StudentsController < ApplicationController
   end
 
   def show
+    authorize @student
   end
 
   def destroy
+    authorize @student
     if @student.destroy
       redirect_to admin_students_path, notice: 'Student was successfully deleted.'
     else

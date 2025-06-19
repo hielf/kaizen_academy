@@ -4,21 +4,25 @@ class Admin::TermsController < ApplicationController
   before_action :set_term, only: [:show, :edit, :update, :destroy]
 
   def index
-    @terms = @school.terms.order(start_date: :desc)
+    @terms = policy_scope(@school.terms).order(start_date: :desc)
   end
 
   def show
+    authorize @term
   end
 
   def new
     @term = @school.terms.build
+    authorize @term
   end
 
   def edit
+    authorize @term
   end
 
   def create
     @term = @school.terms.build(term_params)
+    authorize @term
 
     if @term.save
       redirect_to admin_school_term_path(@school, @term), notice: 'Term was successfully created.'
@@ -28,6 +32,7 @@ class Admin::TermsController < ApplicationController
   end
 
   def update
+    authorize @term
     if @term.update(term_params)
       redirect_to admin_school_term_path(@school, @term), notice: 'Term was successfully updated.'
     else
@@ -36,6 +41,7 @@ class Admin::TermsController < ApplicationController
   end
 
   def destroy
+    authorize @term
     @term.destroy
     redirect_to admin_school_terms_path(@school), notice: 'Term was successfully deleted.'
   end
@@ -44,6 +50,7 @@ class Admin::TermsController < ApplicationController
 
   def set_school
     @school = School.find(params[:school_id])
+    authorize @school
   end
 
   def set_term
