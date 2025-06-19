@@ -6,9 +6,14 @@ class User < ApplicationRecord
 
   # STI: The 'type' column will store the class name (e.g., 'Student', 'Admin')
 
+  # Associations
+  belongs_to :school, optional: true
+
   # Basic validations for shared attributes
   validates :email, presence: true, uniqueness: true
   validates :type, presence: true
+  validates :first_name, presence: true
+  validates :last_name, presence: true
 
   # --- Role-checking helper methods (optional but useful) ---
   def student?

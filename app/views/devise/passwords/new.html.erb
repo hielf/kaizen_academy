@@ -1,16 +1,48 @@
-<h2>Forgot your password?</h2>
+<!-- Outer container for centering -->
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8">
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+  <!-- Main content wrapper with responsive width -->
+  <div class="w-full max-w-xs sm:max-w-sm space-y-8">
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    <!-- Header Section -->
+    <div class="text-center">
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        Forgot your password?
+      </h2>
+      <p class="mt-2 text-center text-sm text-gray-600">
+        Enter your email to reset your password
+      </p>
+    </div>
+
+    <!-- Form Container (the card) -->
+    <div class="bg-white py-8 px-4 shadow-2xl rounded-lg sm:px-10 border border-gray-200">
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: "space-y-6" }) do |f| %>
+        <%= render "devise/shared/error_messages", resource: resource %>
+
+        <!-- Email Field -->
+        <div>
+          <%= f.label :email, class: "block text-sm font-medium text-gray-700" %>
+          <div class="mt-1">
+            <%= f.email_field :email, 
+                autofocus: true, 
+                autocomplete: "email",
+                required: true,
+                class: "appearance-none block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm",
+                placeholder: "Enter your email address" %>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div>
+          <%= f.submit "Send instructions", 
+              class: "w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform transition-transform hover:scale-105" %>
+        </div>
+      <% end %>
+
+      <div class="mt-6 text-center">
+        <%= render "devise/shared/links" %>
+      </div>
+
+    </div>
   </div>
-
-  <div class="actions">
-    <%= f.submit "Send me reset password instructions" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>
