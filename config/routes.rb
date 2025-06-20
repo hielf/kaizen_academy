@@ -17,7 +17,9 @@ Rails.application.routes.draw do
   root to: "home#index"
 
   # Student routes
-  resources :terms, only: [:show]
+  resources :terms, only: [:show] do
+    post :redeem, on: :member
+  end
 
   # Admin routes
   namespace :admin do

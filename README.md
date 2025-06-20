@@ -31,13 +31,17 @@ Kaizen Academy is a Ruby on Rails application designed to provide a platform for
    rails db:migrate
    rails db:seed
    ```
+4. Precompile assets:
+   ```bash
+   rails assets:precompile
+   ```
 
-4. Start the Rails server:
+5. Start the Rails server:
    ```bash
    rails s
    ```
 
-5. Open your browser and navigate to `http://localhost:3000` to view the application.
+6. Open your browser and navigate to `http://localhost:3000` to view the application.
 
 ### Running Tests
 
