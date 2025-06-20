@@ -9,11 +9,11 @@ class License < ApplicationRecord
   validates :term, presence: true
   validates :issued_at, presence: true
   validates :expires_at, presence: true
-  validates :status, presence: true, inclusion: { in: %w(active redeemed expired invalid) }
+  validates :status, presence: true, inclusion: { in: %w[active redeemed expired invalid] }
   validates :expires_at, comparison: { greater_than: :issued_at, message: "must be after issued date" }
 
   # Ensure redeemed_at is present if status is 'redeemed'
-  validates :redeemed_at, presence: true, if: -> { status == 'redeemed' }
+  validates :redeemed_at, presence: true, if: -> { status == "redeemed" }
 
   # Prevent destruction of redeemed licenses
   before_destroy :prevent_destroy_if_redeemed
@@ -25,25 +25,25 @@ class License < ApplicationRecord
 
   # Helper methods for status checks
   def active?
-    status == 'active' && Time.zone.now.between?(issued_at, expires_at) && redeemed_at.nil?
+    status == "active" && Time.zone.now.between?(issued_at, expires_at) && redeemed_at.nil?
   end
 
   def redeemed?
-    status == 'redeemed' && redeemed_at.present?
+    status == "redeemed" && redeemed_at.present?
   end
 
   def expired?
-    status == 'expired' || (expires_at.present? && Time.zone.now > expires_at)
+    status == "expired" || (expires_at.present? && Time.zone.now > expires_at)
   end
 
   # redeem the license
   def redeem!(student)
     # Ensure license is active and not already redeemed/expired
     return false unless active?
-    
+
     transaction do
       # Mark license as redeemed
-      self.status = 'redeemed'
+      self.status = "redeemed"
       self.redeemed_at = Time.zone.now
       save!
 
@@ -53,8 +53,8 @@ class License < ApplicationRecord
         term: term,
         start_date: term.start_date, # Subscription validity matches term dates
         end_date: term.end_date,
-        status: 'active',
-        subscription_type: 'license',
+        status: "active",
+        subscription_type: "license",
         payment_method: self # Polymorphic association to this license
       )
     end
@@ -80,11 +80,11 @@ class License < ApplicationRecord
   private
 
   def set_default_status
-    self.status ||= 'active'
+    self.status ||= "active"
   end
 
   def set_redeemed_at_if_status_changed_to_redeemed
-    if status_changed? && status == 'redeemed' && redeemed_at.nil?
+    if status_changed? && status == "redeemed" && redeemed_at.nil?
       self.redeemed_at = Time.zone.now
     end
   end

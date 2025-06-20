@@ -30,4 +30,4 @@ class TermPolicy < ApplicationPolicy
       end
     end
   end
-end 
+end

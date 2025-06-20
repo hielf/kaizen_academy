@@ -2,7 +2,7 @@ class Admin::LicensesController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_school
   before_action :set_term
-  before_action :set_license, only: [:show, :edit, :update, :destroy]
+  before_action :set_license, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @licenses = policy_scope(@term.licenses)
@@ -24,7 +24,7 @@ class Admin::LicensesController < ApplicationController
     authorize @license
 
     if @license.save
-      redirect_to admin_school_term_license_path(@school, @term, @license), notice: 'License was successfully created.'
+      redirect_to admin_school_term_license_path(@school, @term, @license), notice: "License was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -39,7 +39,7 @@ class Admin::LicensesController < ApplicationController
     if @license.save
       redirect_to admin_school_term_path(@school, @term), notice: "License #{@license.code} was successfully generated."
     else
-      redirect_to admin_school_term_path(@school, @term), alert: 'Failed to generate license.'
+      redirect_to admin_school_term_path(@school, @term), alert: "Failed to generate license."
     end
   end
 
@@ -50,7 +50,7 @@ class Admin::LicensesController < ApplicationController
   def update
     authorize @license
     if @license.update(license_params)
-      redirect_to admin_school_term_license_path(@school, @term, @license), notice: 'License was successfully updated.'
+      redirect_to admin_school_term_license_path(@school, @term, @license), notice: "License was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -59,7 +59,7 @@ class Admin::LicensesController < ApplicationController
   def destroy
     authorize @license
     @license.destroy
-    redirect_to admin_school_term_path(@school, @term), notice: 'License was successfully deleted.'
+    redirect_to admin_school_term_path(@school, @term), notice: "License was successfully deleted."
   end
 
   private
@@ -81,4 +81,4 @@ class Admin::LicensesController < ApplicationController
   def license_params
     params.require(:license).permit(:code, :status)
   end
-end 
+end

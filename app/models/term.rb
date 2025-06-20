@@ -1,6 +1,6 @@
 class Term < ApplicationRecord
   belongs_to :school
-  
+
   # A term can have many courses associated with it.
   # Using has_and_belongs_to_many for simplicity in this take-home.
   # For more complex scenarios (e.g., specific section numbers per term),

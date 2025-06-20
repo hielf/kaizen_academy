@@ -11,6 +11,6 @@ class CreateLicenses < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :licenses, [:term_id, :code], unique: true
+    add_index :licenses, [ :term_id, :code ], unique: true
   end
 end

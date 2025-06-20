@@ -2,7 +2,7 @@ class Admin::CoursesController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_school
   before_action :set_term
-  before_action :set_course, only: [:show, :edit, :update, :destroy]
+  before_action :set_course, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @courses = policy_scope(@term.courses)
@@ -23,7 +23,7 @@ class Admin::CoursesController < ApplicationController
     authorize @course
 
     if @course.save
-      redirect_to admin_school_term_course_path(@school, @term, @course), notice: 'Course was successfully created.'
+      redirect_to admin_school_term_course_path(@school, @term, @course), notice: "Course was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -36,7 +36,7 @@ class Admin::CoursesController < ApplicationController
   def update
     authorize @course
     if @course.update(course_params)
-      redirect_to admin_school_term_course_path(@school, @term, @course), notice: 'Course was successfully updated.'
+      redirect_to admin_school_term_course_path(@school, @term, @course), notice: "Course was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -45,7 +45,7 @@ class Admin::CoursesController < ApplicationController
   def destroy
     authorize @course
     @course.destroy
-    redirect_to admin_school_term_courses_path(@school, @term), notice: 'Course was successfully deleted.'
+    redirect_to admin_school_term_courses_path(@school, @term), notice: "Course was successfully deleted."
   end
 
   private
@@ -67,4 +67,4 @@ class Admin::CoursesController < ApplicationController
   def course_params
     params.require(:course).permit(:title, :description)
   end
-end 
+end

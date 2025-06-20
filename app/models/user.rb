@@ -17,11 +17,11 @@ class User < ApplicationRecord
 
   # --- Role-checking helper methods (optional but useful) ---
   def student?
-    type == 'Student'
+    type == "Student"
   end
 
   def admin?
-    type == 'Admin'
+    type == "Admin"
   end
 
   # Define default Devise redirect path after sign in, useful for STI

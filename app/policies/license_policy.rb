@@ -7,6 +7,10 @@ class LicensePolicy < ApplicationPolicy
     user.admin? || (user.student? && user.school == record.term.school)
   end
 
+  def redeem?
+    show? && user.student? && record.active?
+  end
+
   def create?
     user.admin?
   end
@@ -34,4 +38,4 @@ class LicensePolicy < ApplicationPolicy
       end
     end
   end
-end 
+end

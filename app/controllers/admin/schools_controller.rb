@@ -1,10 +1,10 @@
 class Admin::SchoolsController < ApplicationController
   before_action :authenticate_admin!
-  before_action :set_school, only: [:show, :edit, :update, :destroy]
+  before_action :set_school, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @schools = policy_scope(School).order(:name)
-    
+
     if params[:name_filter].present?
       @schools = @schools.where("name LIKE ?", "%#{params[:name_filter]}%")
     end
@@ -28,7 +28,7 @@ class Admin::SchoolsController < ApplicationController
     authorize @school
 
     if @school.save
-      redirect_to admin_school_path(@school), notice: 'School was successfully created.'
+      redirect_to admin_school_path(@school), notice: "School was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -37,7 +37,7 @@ class Admin::SchoolsController < ApplicationController
   def update
     authorize @school
     if @school.update(school_params)
-      redirect_to admin_school_path(@school), notice: 'School was successfully updated.'
+      redirect_to admin_school_path(@school), notice: "School was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -46,7 +46,7 @@ class Admin::SchoolsController < ApplicationController
   def destroy
     authorize @school
     @school.destroy
-    redirect_to admin_schools_path, notice: 'School was successfully deleted.'
+    redirect_to admin_schools_path, notice: "School was successfully deleted."
   end
 
   private
@@ -58,4 +58,4 @@ class Admin::SchoolsController < ApplicationController
   def school_params
     params.require(:school).permit(:name)
   end
-end 
+end

@@ -30,4 +30,4 @@ class StudentPolicy < ApplicationPolicy
       end
     end
   end
-end 
+end

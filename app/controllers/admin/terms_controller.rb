@@ -1,7 +1,7 @@
 class Admin::TermsController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_school
-  before_action :set_term, only: [:show, :edit, :update, :destroy]
+  before_action :set_term, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @terms = policy_scope(@school.terms).order(start_date: :desc)
@@ -25,7 +25,7 @@ class Admin::TermsController < ApplicationController
     authorize @term
 
     if @term.save
-      redirect_to admin_school_term_path(@school, @term), notice: 'Term was successfully created.'
+      redirect_to admin_school_term_path(@school, @term), notice: "Term was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -34,7 +34,7 @@ class Admin::TermsController < ApplicationController
   def update
     authorize @term
     if @term.update(term_params)
-      redirect_to admin_school_term_path(@school, @term), notice: 'Term was successfully updated.'
+      redirect_to admin_school_term_path(@school, @term), notice: "Term was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -43,7 +43,7 @@ class Admin::TermsController < ApplicationController
   def destroy
     authorize @term
     @term.destroy
-    redirect_to admin_school_terms_path(@school), notice: 'Term was successfully deleted.'
+    redirect_to admin_school_terms_path(@school), notice: "Term was successfully deleted."
   end
 
   private
@@ -60,4 +60,4 @@ class Admin::TermsController < ApplicationController
   def term_params
     params.require(:term).permit(:name, :start_date, :end_date)
   end
-end 
+end

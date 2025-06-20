@@ -1,6 +1,6 @@
 class Purchase < ApplicationRecord
   # A purchase is made by a student
-  belongs_to :student, class_name: 'User', foreign_key: 'student_id'
+  belongs_to :student, class_name: "User", foreign_key: "student_id"
   belongs_to :course # A purchase is for a specific course
 
   # A purchase creates one enrollment
@@ -23,8 +23,8 @@ class Purchase < ApplicationRecord
       course: course,
       start_date: purchased_at.to_date,
       end_date: purchased_at.to_date + 1.year, # Example: 1 year access from purchase
-      access_status: 'active',
-      enrollment_method: 'direct_purchase',
+      access_status: "active",
+      enrollment_method: "direct_purchase",
       purchase: self # Link this purchase to the enrollment
     )
   end

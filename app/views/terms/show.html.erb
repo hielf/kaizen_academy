@@ -38,7 +38,7 @@
     </div>
     
     <!-- Action Buttons -->
-    <% if policy(@term).show? && @term.available? %>
+    <% if policy(@term).show? && @term.available? && current_user.student? %>
       <%# Check if student is already subscribed %>
       <% unless @term.term_subscriptions.exists?(student_id: current_user.id, status: 'active') %>
         <div class="flex space-x-4 mt-6 pt-6 border-t border-gray-200">
@@ -88,7 +88,9 @@
     <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
       <button type="button" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600" data-action="click->modal#close" aria-label="Close">&times;</button>
       <h3 class="text-xl font-bold mb-4 text-gray-900">Redeem License</h3>
-      <%= form_with(url: redeem_term_path(@term), method: :post, local: true, class: "space-y-4") do |form| %>
+      <div id="redeem_feedback" class="mb-4"></div>
+      <%= form_with(url: redeem_license_path, method: :post, local: false, class: "space-y-4") do |form| %>
+        <%= form.hidden_field :term_id, value: @term.id %>
         <div>
           <%= form.label :license_code, class: "block text-sm font-medium text-gray-700" %>
           <%= form.text_field :license_code, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500", required: true %>

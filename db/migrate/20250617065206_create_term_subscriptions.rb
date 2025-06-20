@@ -14,6 +14,6 @@ class CreateTermSubscriptions < ActiveRecord::Migration[8.0]
       t.timestamps
     end
     # Add a unique index to prevent duplicate active subscriptions for a student in a term
-    add_index :term_subscriptions, [:student_id, :term_id], unique: true
+    add_index :term_subscriptions, [ :student_id, :term_id ], unique: true
   end
 end
