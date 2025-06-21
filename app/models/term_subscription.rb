@@ -33,15 +33,23 @@ class TermSubscription < ApplicationRecord
   # Create enrollments for all courses associated with the subscribed term
   def create_term_enrollments
     term.courses.each do |course|
-      Enrollment.find_or_create_by!(
+      Enrollment.enroll!(
         student: student,
         course: course,
-        start_date: start_date,
-        end_date: end_date,
-        access_status: "active",
         enrollment_method: subscription_type == "license" ? "term_subscription_license" : "term_subscription_credit_card",
-        term_subscription: self # Link this term subscription to the enrollment
+        term_subscription: self
       )
     end
+    # term.courses.each do |course|
+    #   Enrollment.find_or_create_by!(
+    #     student: student,
+    #     course: course,
+    #     start_date: start_date,
+    #     end_date: end_date,
+    #     access_status: "active",
+    #     enrollment_method: subscription_type == "license" ? "term_subscription_license" : "term_subscription_credit_card",
+    #     term_subscription: self # Link this term subscription to the enrollment
+    #   )
+    # end
   end
 end

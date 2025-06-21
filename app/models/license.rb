@@ -36,7 +36,7 @@ class License < ApplicationRecord
     status == "expired" || (expires_at.present? && Time.zone.now > expires_at)
   end
 
-  # redeem the license
+  # redeem the license 242V7LCQ4FC29SVL
   def redeem!(student)
     # Ensure license is active and not already redeemed/expired
     return false unless active?
@@ -48,7 +48,7 @@ class License < ApplicationRecord
       save!
 
       # Create the TermSubscription associated with this license
-      TermSubscription.create!(
+      subscription = TermSubscription.create!(
         student: student,
         term: term,
         start_date: term.start_date, # Subscription validity matches term dates
@@ -57,8 +57,22 @@ class License < ApplicationRecord
         subscription_type: "license",
         payment_method: self # Polymorphic association to this license
       )
+
+      # # Enroll the student in all courses for this term
+      # term.courses.each do |course|
+      #   Enrollment.enroll!(
+      #     student: student,
+      #     course: course,
+      #     enrollment_method: "term_subscription_license",
+      #     term_subscription: subscription
+      #   )
+      # end
     end
     true
+  rescue ActiveRecord::RecordInvalid => e
+    errors.add(:base, e.message)
+    Rails.logger.error("Failed to redeem license #{code}: #{e.message}")
+    false
   rescue StandardError => e
     Rails.logger.error("Failed to redeem license #{code}: #{e.message}")
     false
@@ -71,7 +85,7 @@ class License < ApplicationRecord
       # Example: Use SecureRandom.alphanumeric for user-friendly codes
       # Choose a length that balances readability and collision probability.
       # 16 characters (alphanumeric) offers very high uniqueness.
-      new_code = SecureRandom.alphanumeric(16).upcase # Upcase for consistency/readability
+      new_code = SecureRandom.alphanumeric(16).upcase.scan(/.{4}/).join('_')
       self.code = new_code
       break unless License.exists?(code: new_code) # Exit loop if code is unique
     end
