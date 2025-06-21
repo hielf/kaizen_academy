@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_17_065206) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_21_110011) do
   create_table "courses", force: :cascade do |t|
     t.string "title", null: false
     t.text "description", null: false
@@ -18,6 +18,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_17_065206) do
     t.integer "term_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "price", precision: 10, scale: 2, default: "0.0"
     t.index ["school_id"], name: "index_courses_on_school_id"
     t.index ["term_id"], name: "index_courses_on_term_id"
     t.index ["title", "school_id"], name: "index_courses_on_title_and_school_id", unique: true
@@ -67,15 +68,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_17_065206) do
 
   create_table "purchases", force: :cascade do |t|
     t.integer "student_id", null: false
-    t.integer "course_id", null: false
     t.decimal "amount", precision: 10, scale: 2, null: false
     t.string "transaction_id"
     t.datetime "purchased_at", default: -> { "NOW()" }, null: false
-    t.integer "enrollment_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["course_id"], name: "index_purchases_on_course_id"
-    t.index ["enrollment_id"], name: "index_purchases_on_enrollment_id"
+    t.string "purchasable_type", null: false
+    t.integer "purchasable_id", null: false
+    t.index ["purchasable_type", "purchasable_id"], name: "index_purchases_on_purchasable"
     t.index ["student_id"], name: "index_purchases_on_student_id"
   end
 
@@ -112,6 +112,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_17_065206) do
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "price", precision: 10, scale: 2, default: "0.0"
     t.index ["school_id", "name"], name: "index_terms_on_school_id_and_name", unique: true
     t.index ["school_id"], name: "index_terms_on_school_id"
   end
@@ -141,8 +142,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_17_065206) do
   add_foreign_key "enrollments", "term_subscriptions"
   add_foreign_key "enrollments", "users", column: "student_id"
   add_foreign_key "licenses", "terms"
-  add_foreign_key "purchases", "courses"
-  add_foreign_key "purchases", "enrollments"
   add_foreign_key "purchases", "users", column: "student_id"
   add_foreign_key "term_subscriptions", "terms"
   add_foreign_key "term_subscriptions", "users", column: "student_id"

@@ -8,10 +8,13 @@ class Term < ApplicationRecord
   has_many :courses, dependent: :nullify
 
   has_many :term_subscriptions, dependent: :destroy # Subscriptions for this term
+  has_many :students, through: :term_subscriptions
+  has_many :purchases, as: :purchasable, dependent: :destroy # Terms can be directly purchased
 
   validates :name, presence: true
   validates :start_date, presence: true
   validates :end_date, presence: true
+  validates :price, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :end_date, comparison: { greater_than: :start_date, message: "must be after the start date" }
 
   # Ensure term names are unique per school
@@ -24,4 +27,7 @@ class Term < ApplicationRecord
   def available?
     end_date > Time.zone.now
   end
+
+  # A term must have a start date that is before the end date.
+  validate :start_date_before_end_date
 end

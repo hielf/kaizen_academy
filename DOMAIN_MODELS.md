@@ -50,7 +50,6 @@ Represents a semester period (e.g., Fall 2025).
 Represents a specific course.
 - **Relationships**:
   - `belongs_to :term`
-  - `has_many :purchases`
   - `has_many :enrollments`
 
 ---
@@ -66,11 +65,11 @@ Represents a student's access to a specific `Course`.
 ---
 
 ## Purchase
-Represents a direct credit card purchase of an individual `Course`.
+Represents a direct credit card purchase of an individual `Course` or `Term`.
 - **Relationships**:
   - `belongs_to :student`
-  - `belongs_to :course`
-  - `has_one :enrollment`
+  - `has_one :purchasable` (Polymorphic: e.g., Term, Course)
+  - `has_many :enrollments`
 
 ---
 

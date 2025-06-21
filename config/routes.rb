@@ -19,8 +19,12 @@ Rails.application.routes.draw do
   # Student routes
   resources :terms, only: [:show]
   resources :courses, only: [:show]
+  
   post "license/redeem", to: "licenses#redeem", as: :redeem_license
+  post 'payments/prepare', to: 'payments#prepare', as: 'prepare_payment'
+  post 'payments', to: 'payments#create'
 
+  get 'payment/new', to: 'payments#new', as: 'new_payment'
 
   # Admin routes
   namespace :admin do

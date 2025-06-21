@@ -28,9 +28,13 @@
     </div>
     
     <!-- Action Buttons -->
-    <div class="flex space-x-4 mt-6 pt-6 border-t border-gray-200">
-      <%= link_to 'Purchase with Credit Card', '#', 
-          class: 'bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2' %>
-    </div>
+    <% if current_user&.student? %>
+      <div class="mt-6">
+        <%= button_to 'Purchase with Credit Card', prepare_payment_path,
+                    params: { signed_info: signed_purchasable(@course) },
+                    method: :post,
+                    class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+      </div>
+    <% end %>
   </div>
 </div> 
