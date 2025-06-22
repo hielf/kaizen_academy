@@ -49,10 +49,22 @@
             <% @enrollments.each do |enrollment| %>
               <tr>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm font-medium text-gray-900"><%= enrollment.course&.title || 'N/A' %></div>
+                  <div class="text-sm font-medium text-gray-900">
+                    <% if enrollment.course %>
+                      <%= link_to enrollment.course.title, course_path(enrollment.course), class: 'text-blue-600 hover:text-blue-800 hover:underline' %>
+                    <% else %>
+                      N/A
+                    <% end %>
+                  </div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900"><%= enrollment.course&.term&.name || 'N/A' %></div>
+                  <div class="text-sm text-gray-900">
+                    <% if enrollment.course&.term %>
+                      <%= link_to enrollment.course.term.name, term_path(enrollment.course.term), class: 'text-blue-600 hover:text-blue-800 hover:underline' %>
+                    <% else %>
+                      N/A
+                    <% end %>
+                  </div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <span class="<%= enrollment.active? ? 'text-green-600' : 'text-gray-500' %>">

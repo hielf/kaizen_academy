@@ -15,7 +15,20 @@
 
   <!-- Term Details -->
   <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-    <h2 class="text-2xl font-bold text-gray-900 mb-6">Term Information</h2>
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl font-bold text-gray-900">Term Information</h2>
+      <% if current_user&.student? && @term.term_subscriptions.exists?(student_id: current_user.id, status: 'active') %>
+        <div class="flex items-center space-x-2">
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+            <span class="w-2 h-2 rounded-full bg-green-400 mr-2"></span>
+            Subscribed
+          </span>
+          <span class="text-sm text-gray-500">
+            Subscribed on <%= @term.term_subscriptions.find_by(student_id: current_user.id, status: 'active').created_at.strftime("%B %d, %Y") %>
+          </span>
+        </div>
+      <% end %>
+    </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
         <p class="text-gray-600 mb-1">Start Date:</p>
@@ -50,10 +63,6 @@
               method: :post,
               class: 'bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2' %>
         </div>
-      <% else %>
-        <div class="mt-6 pt-6 border-t border-gray-200">
-          <p class="text-green-600 font-medium">You are already subscribed to this term.</p>
-        </div>
       <% end %>
     <% end %>
   </div>
@@ -70,10 +79,10 @@
             <p class="text-sm text-gray-600 mb-3"><%= course.description %></p>
             <div class="flex space-x-2">
               <% if current_user.enrollments.exists?(course_id: course.id) %>
-                <%= link_to 'View Details', '#',
+                <%= link_to 'View Details', course_path(course),
                     class: 'flex-1 bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-center' %>
               <% else %>
-                <%= link_to 'Enroll', '#',
+                <%= link_to 'Enroll', course_path(course),
                     class: 'flex-1 bg-green-500 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 text-center' %>
               <% end %>
             </div>

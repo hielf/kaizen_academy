@@ -109,7 +109,7 @@ class PaymentsController < ApplicationController
         # Then create purchase
         purchase = Purchase.create!(
           student: current_user,
-          course: @purchasable,
+          purchasable: @purchasable,
           amount: @purchasable.price,
           purchased_at: Time.current
         )

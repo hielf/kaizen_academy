@@ -15,7 +15,21 @@
 
   <!-- Course Details -->
   <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-    <h2 class="text-2xl font-bold text-gray-900 mb-6">Course Information</h2>
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl font-bold text-gray-900">Course Information</h2>
+      <% if current_user&.student? && current_user.enrollments.exists?(course_id: @course.id) %>
+        <% enrollment = current_user.enrollments.find_by(course_id: @course.id) %>
+        <div class="flex items-center space-x-2">
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium <%= enrollment.active? ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' %>">
+            <span class="w-2 h-2 rounded-full <%= enrollment.active? ? 'bg-green-400' : 'bg-gray-400' %> mr-2"></span>
+            <%= enrollment.active? ? 'Enrolled' : 'Inactive' %>
+          </span>
+          <span class="text-sm text-gray-500">
+            Enrolled on <%= enrollment.join_date.strftime("%B %d, %Y") %>
+          </span>
+        </div>
+      <% end %>
+    </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
         <p class="text-gray-600 mb-1">Description:</p>
@@ -30,10 +44,15 @@
     <!-- Action Buttons -->
     <% if current_user&.student? %>
       <div class="mt-6">
-        <%= button_to 'Purchase with Credit Card', prepare_payment_path,
-                    params: { signed_info: signed_purchasable(@course) },
-                    method: :post,
-                    class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+        <% if current_user.enrollments.exists?(course_id: @course.id) %>
+          <%= link_to 'Start Study', '#', 
+              class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200" %>
+        <% else %>
+          <%= button_to 'Purchase with Credit Card', prepare_payment_path,
+                      params: { signed_info: signed_purchasable(@course) },
+                      method: :post,
+                      class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200" %>
+        <% end %>
       </div>
     <% end %>
   </div>
