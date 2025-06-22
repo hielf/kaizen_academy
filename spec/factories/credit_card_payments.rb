@@ -4,5 +4,6 @@ FactoryBot.define do
     expiry_date { '12/25' } # Valid future date
     card_type { 'Visa' }
     processed_at { Time.zone.now }
+    transaction_id { "txn_#{SecureRandom.alphanumeric(24).downcase}" }
   end
 end

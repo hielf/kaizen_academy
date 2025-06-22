@@ -2,7 +2,8 @@ Rails.application.routes.draw do
   # Devise routes for Users (which includes Student and Admin via STI)
   devise_for :users, controllers: {
     registrations: "users/registrations",
-    sessions: "users/sessions"
+    sessions: "users/sessions",
+    passwords: "users/passwords"
   }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

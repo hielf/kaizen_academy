@@ -21,6 +21,14 @@
 
   <body class="bg-gray-100">
     <div class="min-h-screen">
+      <!-- Navigation Bar -->
+      <%= render 'shared/navigation' %>
+      
+      <!-- Alert System -->
+      <%= render 'shared/alert' %>
+      <%= render 'shared/notice' %>
+      
+      <!-- Main Content -->
       <%= yield %>
       <%= yield :error_page %>
     </div>

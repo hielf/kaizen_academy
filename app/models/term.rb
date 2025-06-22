@@ -23,6 +23,13 @@ class Term < ApplicationRecord
   has_many :enrollments, through: :courses
   has_many :licenses, dependent: :destroy
 
+  # Scopes for filtering terms
+  scope :available, -> { where("end_date > ?", Time.zone.now) }
+  scope :active, -> { where("start_date <= ? AND end_date > ?", Time.zone.now, Time.zone.now) }
+  scope :upcoming, -> { where("start_date > ?", Time.zone.now) }
+  scope :expired, -> { where("end_date <= ?", Time.zone.now) }
+  scope :for_school, ->(school) { where(school: school) }
+
   # Helper to check if the term is currently available
   def available?
     end_date > Time.zone.now

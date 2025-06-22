@@ -94,3 +94,17 @@ Represents a unique, generated code used for `TermSubscription`.
   - `redeemed_at` (datetime, nullable)
   - `expires_at` (datetime)
   - `status` (string: 'active', 'redeemed', 'expired') 
+
+---
+
+## CreditCardPayment
+Represents a credit card payment used as a payment method for a `TermSubscription` or for direct purchases.
+- **Relationships**:
+  - `has_one :term_subscription` (as its payment method, polymorphic)
+- **Attributes**:
+  - `last_four` (string, last 4 digits of card)
+  - `expiry_date` (string, MM/YY format)
+  - `card_type` (string, e.g., Visa, Mastercard)
+  - `processed_at` (datetime, when payment was processed)
+  - `transaction_id` (string, payment gateway transaction reference)
+  - `timestamps` 

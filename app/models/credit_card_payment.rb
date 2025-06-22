@@ -13,13 +13,33 @@ class CreditCardPayment < ApplicationRecord
   # Simulate payment processing success
   def process_payment!
     # this would interact with a payment gateway in the future
-    update(processed_at: Time.zone.now) if processed_at.nil?
+    # For now, simulate a transaction ID
+    if processed_at.nil?
+      txn_id = generate_simulated_transaction_id
+      update_columns(processed_at: Time.zone.now, transaction_id: txn_id)
+      self.transaction_id = txn_id
+      self.processed_at = Time.zone.now
+    elsif transaction_id.nil?
+      txn_id = generate_simulated_transaction_id
+      update_columns(transaction_id: txn_id)
+      self.transaction_id = txn_id
+    end
     true # Assume success
+  end
+
+  def processed?
+    processed_at.present?
   end
 
   private
 
   def set_processed_at
     self.processed_at = Time.zone.now
+  end
+
+  def generate_simulated_transaction_id
+    # Generate a realistic-looking transaction ID for testing
+    # In production, this would come from the payment gateway
+    "txn_#{SecureRandom.alphanumeric(24).downcase}"
   end
 end

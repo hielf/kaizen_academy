@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_21_110011) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_22_091038) do
   create_table "courses", force: :cascade do |t|
     t.string "title", null: false
     t.text "description", null: false
@@ -31,6 +31,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_21_110011) do
     t.datetime "processed_at", default: -> { "NOW()" }, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "transaction_id"
   end
 
   create_table "enrollments", force: :cascade do |t|
