@@ -26,7 +26,7 @@ class Admin::StudentsController < ApplicationController
     if @student.destroy
       redirect_to admin_students_path, notice: "Student was successfully deleted."
     else
-      redirect_to admin_student_path(@student), alert: "Failed to delete student."
+      redirect_to admin_student_path(@student), alert: @student.errors.full_messages.join(", ")
     end
   end
 

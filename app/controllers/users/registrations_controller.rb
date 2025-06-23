@@ -5,10 +5,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   before_action :configure_sign_up_params, only: [ :create ]
   before_action :configure_account_update_params, only: [ :update ]
+  before_action :set_schools, only: [ :new, :create ]
 
   # GET /resource/sign_up
   def new
-    @schools = School.where(status: "active").order(:name)
     super
   end
 
@@ -20,6 +20,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   protected
+
+  # Set schools for the form
+  def set_schools
+    @schools = School.where(status: "active").order(:name)
+  end
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_sign_up_params

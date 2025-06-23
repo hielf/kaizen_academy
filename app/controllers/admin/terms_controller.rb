@@ -44,8 +44,11 @@ class Admin::TermsController < ApplicationController
 
   def destroy
     authorize @term
-    @term.destroy
-    redirect_to admin_school_terms_path(@school), notice: "Term was successfully deleted."
+    if @term.destroy
+      redirect_to admin_school_terms_path(@school), notice: "Term was successfully deleted."
+    else
+      redirect_to admin_school_term_path(@school, @term), alert: @term.errors.full_messages.join(", ")
+    end
   end
 
   private

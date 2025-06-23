@@ -44,8 +44,11 @@ class Admin::CoursesController < ApplicationController
 
   def destroy
     authorize @course
-    @course.destroy
-    redirect_to admin_school_term_courses_path(@school, @term), notice: "Course was successfully deleted."
+    if @course.destroy
+      redirect_to admin_school_term_courses_path(@school, @term), notice: "Course was successfully deleted."
+    else
+      redirect_to admin_school_term_course_path(@school, @term, @course), alert: @course.errors.full_messages.join(", ")
+    end
   end
 
   private

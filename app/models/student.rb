@@ -12,4 +12,23 @@ class Student < User
 
   # Students must be associated with a school
   validates :school, presence: { message: "must be associated with a school" }
+
+  before_destroy :check_for_associated_records
+
+  private
+
+  def check_for_associated_records
+    if enrollments.exists?
+      errors.add(:base, "Cannot delete student with enrollments")
+      throw(:abort)
+    end
+    if purchases.exists?
+      errors.add(:base, "Cannot delete student with purchases")
+      throw(:abort)
+    end
+    if term_subscriptions.exists?
+      errors.add(:base, "Cannot delete student with term subscriptions")
+      throw(:abort)
+    end
+  end
 end

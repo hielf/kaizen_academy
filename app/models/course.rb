@@ -15,7 +15,22 @@ class Course < ApplicationRecord
   # Ensure course titles are unique per school
   validates :title, uniqueness: { scope: :school_id, message: "already exists for this school" }
 
+  before_destroy :check_for_associated_records
+
   def self.ransackable_attributes(auth_object = nil)
     # ... existing code ...
+  end
+
+  private
+
+  def check_for_associated_records
+    if enrollments.exists?
+      errors.add(:base, "Cannot delete course with associated enrollments")
+      throw(:abort)
+    end
+    if purchases.exists?
+      errors.add(:base, "Cannot delete course with associated purchases")
+      throw(:abort)
+    end
   end
 end
