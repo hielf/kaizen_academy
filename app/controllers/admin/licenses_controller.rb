@@ -58,8 +58,11 @@ class Admin::LicensesController < ApplicationController
 
   def destroy
     authorize @license
-    @license.destroy
-    redirect_to admin_school_term_path(@school, @term), notice: "License was successfully deleted."
+    if @license.destroy
+      redirect_to admin_school_term_path(@school, @term), notice: "License was successfully deleted."
+    else
+      redirect_to admin_school_term_path(@school, @term), alert: @license.errors.full_messages.join(", ")
+    end
   end
 
   private

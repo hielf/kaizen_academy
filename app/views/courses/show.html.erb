@@ -1,14 +1,6 @@
 <!-- Main Content -->
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-  <!-- Course Header -->
-  <div class="mb-8">
-    <div class="flex items-center justify-between">
-      <div>
-        <h1 class="text-3xl font-bold text-gray-900 mb-2"><%= @course.title %></h1>
-        <p class="text-gray-600">Course details for <%= @course.school.name %></p>
-      </div>
-    </div>
-  </div>
+  <%= render 'shared/student_breadcrumb_navigation' %>
 
   <!-- Course Details -->
   <div class="bg-white rounded-lg shadow-md p-6 mb-8">
@@ -42,8 +34,15 @@
     <% if current_user&.student? %>
       <div class="mt-6">
         <% if current_user.enrollments.exists?(course_id: @course.id) %>
-          <%= link_to 'Start Study', '#', 
-              class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200" %>
+          <% enrollment = current_user.enrollments.find_by(course_id: @course.id) %>
+          <% if enrollment.active? %>
+            <%= link_to 'Start Study', '#', 
+                class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200" %>
+          <% else %>
+            <p class="text-blue-600 font-medium">
+              The course will start at <%= @course.term.start_date.strftime("%B %d, %Y") %>
+            </p>
+          <% end %>
         <% else %>
           <%= button_to 'Purchase with Credit Card', prepare_payment_path,
                       params: { signed_info: signed_purchasable(@course) },

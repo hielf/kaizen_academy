@@ -10,7 +10,7 @@
 
 # Create admin user if it doesn't exist
 admin_email = ENV['ADMIN_EMAIL'] || 'admin@school.com'
-admin_password = ENV['ADMIN_PASSWORD'] || 'kaizen1234' # Change this in production!
+admin_password = ENV['ADMIN_PASSWORD'] || '123456' # Change this in production!
 
 admin = Admin.find_or_initialize_by(email: admin_email) do |user|
   user.password = admin_password

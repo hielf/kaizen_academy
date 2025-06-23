@@ -1,5 +1,7 @@
 <!-- Main Content -->
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <%= render 'shared/student_breadcrumb_navigation' %>
+
   <!-- Welcome Section -->
   <div class="mb-8">
     <h2 class="text-3xl font-bold text-gray-900 mb-2">Student Dashboard</h2>
@@ -126,7 +128,7 @@
           <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow flex flex-col justify-between">
             <div>
               <h4 class="text-lg font-semibold text-gray-900 mb-2"><%= course.title %></h4>
-              <p class="text-sm text-gray-600 mb-3"><%= course.description %></p>
+              <p class="text-sm text-gray-600 mb-3 h-16 overflow-hidden line-clamp-4 min-h-[4rem]"><%= course.description %></p>
               <div class="text-sm text-gray-500 mb-4">
                 <p><strong>Term:</strong> <%= course.term&.name || 'N/A' %></p>
                 <p><strong>Enrollments:</strong> <%= course.enrollments.count %></p>

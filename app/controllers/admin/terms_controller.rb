@@ -27,6 +27,7 @@ class Admin::TermsController < ApplicationController
     if @term.save
       redirect_to admin_school_term_path(@school, @term), notice: "Term was successfully created."
     else
+      flash.now[:alert] = @term.errors.full_messages.join(", ")
       render :new, status: :unprocessable_entity
     end
   end
@@ -36,6 +37,7 @@ class Admin::TermsController < ApplicationController
     if @term.update(term_params)
       redirect_to admin_school_term_path(@school, @term), notice: "Term was successfully updated."
     else
+      flash.now[:alert] = @term.errors.full_messages.join(", ")
       render :edit, status: :unprocessable_entity
     end
   end

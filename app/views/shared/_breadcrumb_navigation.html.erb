@@ -1,0 +1,51 @@
+<nav class="bg-white rounded-lg shadow-md p-4 mb-6" aria-label="Breadcrumb">
+  <div class="flex items-center space-x-2 text-sm">
+    <% breadcrumbs = [] %>
+    
+    <%# Start with Dashboard %>
+    <% breadcrumbs << { name: 'Dashboard', path: root_path } %>
+    
+    <%# Add Schools link for school-related pages %>
+    <% if controller_name == 'schools' || (defined?(@school) && @school) %>
+      <% breadcrumbs << { name: 'Schools', path: admin_schools_path } %>
+    <% end %>
+    
+    <%# Add school if available %>
+    <% if defined?(@school) && @school.id %>
+      <% breadcrumbs << { name: @school.name, path: admin_school_path(@school) } %>
+    <% end %>
+    
+    <%# Add Terms link for term-related pages %>
+    <% if controller_name == 'terms' || (defined?(@term) && @term) %>
+      <% if defined?(@school) && @school %>
+        <% breadcrumbs << { name: 'Terms', path: admin_school_terms_path(@school) } %>
+      <% end %>
+    <% end %>
+    
+    <%# Add term if available %>
+    <% if defined?(@term) && @term && defined?(@school) && @school && @term.id %>
+      <% breadcrumbs << { name: @term.name, path: admin_school_term_path(@school, @term) } %>
+    <% end %>
+    
+    <%# Add Courses link for course-related pages %>
+    <% if controller_name == 'courses' || (defined?(@course) && @course) %>
+      <% if defined?(@school) && @school && defined?(@term) && @term %>
+        <% breadcrumbs << { name: 'Courses', path: admin_school_term_courses_path(@school, @term) } %>
+      <% end %>
+    <% end %>
+    
+    <%# Add course if available %>
+    <% if defined?(@course) && @course && defined?(@school) && @school && defined?(@term) && @term && @course.id %>
+      <% breadcrumbs << { name: @course.title, path: admin_school_term_course_path(@school, @term, @course) } %>
+    <% end %>
+    
+    <% breadcrumbs.each_with_index do |crumb, index| %>
+      <% if index > 0 %>
+        <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+        </svg>
+      <% end %>
+      <%= link_to crumb[:name], crumb[:path], class: "text-blue-600 hover:text-blue-800 transition-colors duration-200 #{index == breadcrumbs.length - 1 ? 'font-bold text-gray-900' : ''}" %>
+    <% end %>
+  </div>
+</nav> 

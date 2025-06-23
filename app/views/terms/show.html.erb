@@ -1,14 +1,6 @@
 <!-- Main Content -->
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" data-controller="modal">
-  <!-- Term Header -->
-  <div class="mb-8">
-    <div class="flex items-center justify-between">
-      <div>
-        <h1 class="text-3xl font-bold text-gray-900 mb-2"><%= @term.name %></h1>
-        <p class="text-gray-600">Term details for <%= @term.school.name %></p>
-      </div>
-    </div>
-  </div>
+  <%= render 'shared/student_breadcrumb_navigation' %>
 
   <!-- Term Details -->
   <div class="bg-white rounded-lg shadow-md p-6 mb-8">
@@ -73,7 +65,7 @@
         <% @courses.each do |course| %>
           <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
             <h3 class="text-lg font-semibold text-gray-900 mb-2"><%= course.title %></h3>
-            <p class="text-sm text-gray-600 mb-3"><%= course.description %></p>
+            <p class="text-sm text-gray-600 mb-3 h-16 overflow-hidden line-clamp-4 min-h-[4rem]"><%= course.description %></p>
             <div class="flex space-x-2">
               <% if current_user.enrollments.exists?(course_id: course.id) %>
                 <%= link_to 'View Details', course_path(course),

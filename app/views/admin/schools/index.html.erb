@@ -1,11 +1,5 @@
-<div class="container mx-auto px-4 py-8">
-  <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold">Schools</h1>
-    <div class="flex space-x-4">
-      <%= link_to 'New School', new_admin_school_path, class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' %>
-      <%= link_to 'Back to Admin Dashboard', root_path, class: 'bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded' %>
-    </div>
-  </div>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <%= render 'shared/breadcrumb_navigation' %>
 
   <% if notice %>
     <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
@@ -21,8 +15,8 @@
         <%= form.text_field :name_filter, value: params[:name_filter], class: "flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" %>
       </div>
       <div class="flex items-center space-x-2">
-        <%= form.submit "Search", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2" %>
-        <%= link_to "Clear", admin_schools_path, class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" %>
+        <%= form.submit "Search", class: "text-white px-4 py-2 rounded-md text-sm font-medium bg-emerald-600 hover:bg-emerald-700 transition-colors duration-200 mr-2" %>
+        <%= link_to 'New School', new_admin_school_path, class: 'text-white px-4 py-2 rounded-md text-sm font-medium bg-slate-600 hover:bg-slate-700 transition-colors duration-200' %>
       </div>
     <% end %>
   </div>
@@ -44,7 +38,10 @@
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5">
               <div class="flex items-center space-x-3">
                 <%= link_to 'Edit', edit_admin_school_path(school), class: 'text-yellow-600 hover:text-yellow-900' %>
-                <%= button_to 'Delete', admin_school_path(school), method: :delete, class: 'text-red-600 hover:text-red-900', data: { confirm: 'Are you sure?' } %>
+                <%= link_to 'Delete', admin_school_path(school), 
+                    method: :delete, 
+                    class: 'text-red-600 hover:text-red-900', 
+                    data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' } %>
               </div>
             </td>
           </tr>

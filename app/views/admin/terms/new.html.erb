@@ -1,11 +1,5 @@
-<div class="container mx-auto px-4 py-8">
-  <div class="flex justify-between items-center mb-6">
-    <div>
-      <h1 class="text-2xl font-bold">New Term</h1>
-      <p class="text-gray-600 mt-2">Create a new term for <%= @school.name %></p>
-    </div>
-    <%= link_to 'Back to Terms', admin_school_terms_path(@school), class: 'bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded' %>
-  </div>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <%= render 'shared/breadcrumb_navigation' %>
 
   <div class="bg-white shadow-md rounded p-6">
     <%= render 'form', term: @term %>

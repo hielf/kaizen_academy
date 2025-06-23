@@ -34,7 +34,4 @@ class Term < ApplicationRecord
   def available?
     end_date > Time.zone.now
   end
-
-  # A term must have a start date that is before the end date.
-  validate :start_date_before_end_date
 end

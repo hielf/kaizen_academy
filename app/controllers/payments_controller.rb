@@ -121,7 +121,8 @@ class PaymentsController < ApplicationController
           payment_method: @credit_card_payment,
           start_date: Time.current,
           end_date: Time.current + 1.year, # Placeholder
-          status: 'active'
+          status: 'active',
+          subscription_type: 'credit_card'
         )
       end
     end

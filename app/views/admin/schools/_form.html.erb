@@ -1,22 +1,16 @@
+<% object = school %>
 <%= form_with(model: [:admin, school], class: "space-y-6") do |form| %>
-  <% if school.errors.any? %>
-    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-      <h2 class="font-bold mb-2"><%= pluralize(school.errors.count, "error") %> prohibited this school from being saved:</h2>
-      <ul class="list-disc list-inside">
-        <% school.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
   <div>
     <%= form.label :name, class: "block text-sm font-medium text-gray-700" %>
-    <%= form.text_field :name, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+    <%= form.text_field :name, 
+        class: "mt-1 block w-full rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 #{school.errors[:name].any? ? 'border-red-300' : 'border-gray-300'}" %>
+    <% if school.errors[:name].any? %>
+      <p class="mt-1 text-sm text-red-600"><%= school.errors[:name].first %></p>
+    <% end %>
   </div>
 
   <div class="flex items-center justify-end space-x-3">
-    <%= link_to 'Cancel', admin_schools_path, class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" %>
-    <%= form.submit class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+    <%= link_to 'Cancel', admin_schools_path, class: "text-gray-600 px-4 py-2 rounded-md text-sm font-medium hover:text-gray-900 transition-colors duration-200" %>
+    <%= form.submit class: "text-white px-4 py-2 rounded-md text-sm font-medium bg-emerald-600 hover:bg-emerald-700 transition-colors duration-200" %>
   </div>
 <% end %> 

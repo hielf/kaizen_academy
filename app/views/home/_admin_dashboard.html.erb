@@ -1,24 +1,91 @@
 <!-- Admin Dashboard -->
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-  <div class="flex justify-between items-center mb-8">
-    <h1 class="text-3xl font-bold">Admin Dashboard</h1>
+  <!-- Dashboard Statistics -->
+  <div class="bg-white shadow-md rounded p-6 mb-8">
+    <h2 class="text-xl font-semibold mb-6">Dashboard Overview</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div class="bg-gray-50 p-4 rounded">
+        <p class="text-gray-600 text-sm">Total Schools</p>
+        <p class="text-2xl font-bold"><%= School.count %></p>
+      </div>
+      <div class="bg-gray-50 p-4 rounded">
+        <p class="text-gray-600 text-sm">Total Terms</p>
+        <p class="text-2xl font-bold"><%= Term.count %></p>
+      </div>
+      <div class="bg-gray-50 p-4 rounded">
+        <p class="text-gray-600 text-sm">Total Students</p>
+        <p class="text-2xl font-bold"><%= Student.count %></p>
+      </div>
+      <div class="bg-gray-50 p-4 rounded">
+        <p class="text-gray-600 text-sm">Total Courses</p>
+        <p class="text-2xl font-bold"><%= Course.count %></p>
+      </div>
+    </div>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <!-- Schools Management Card -->
-    <div class="bg-white rounded-lg shadow-md p-6">
-      <h2 class="text-xl font-semibold mb-4">Schools Management</h2>
-      <p class="text-gray-600 mb-4">Manage schools, their courses, and student enrollments.</p>
-      <%= link_to 'Manage Schools', admin_schools_path, class: 'inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' %>
+  <!-- Enrollment Statistics -->
+  <div class="bg-white shadow-md rounded p-6 mb-8">
+    <h2 class="text-xl font-semibold mb-6">Enrollment Statistics</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-gray-50 p-4 rounded">
+        <h3 class="text-lg font-medium mb-4">Students by Payment Method</h3>
+        <div class="space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600">Credit Card Payments:</span>
+            <span class="font-semibold"><%= TermSubscription.where(subscription_type: 'credit_card').distinct.count(:student_id) %></span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600">License Redemptions:</span>
+            <span class="font-semibold"><%= License.where(status: 'redeemed').count %></span>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gray-50 p-4 rounded">
+        <h3 class="text-lg font-medium mb-4">Top Enrolled Courses</h3>
+        <div class="space-y-2">
+          <% Course.joins(:enrollments).group('courses.id').order('COUNT(enrollments.id) DESC').limit(5).each do |course| %>
+            <div class="flex justify-between items-center">
+              <span class="text-gray-600 truncate"><%= course.title %></span>
+              <span class="font-semibold"><%= course.enrollments.count %></span>
+            </div>
+          <% end %>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Students Management Card -->
-    <div class="bg-white rounded-lg shadow-md p-6">
-      <h2 class="text-xl font-semibold mb-4">Students Management</h2>
-      <p class="text-gray-600 mb-4">View and manage student accounts, enrollments, and subscriptions.</p>
-      <%= link_to 'Manage Students', admin_students_path, class: 'inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' %>
+  <!-- Schools and Terms Overview -->
+  <div class="bg-white shadow-md rounded p-6 mb-8">
+    <h2 class="text-xl font-semibold mb-6">Schools & Terms Overview</h2>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div>
+        <h3 class="text-lg font-medium mb-4">Students per Term</h3>
+        <div class="space-y-2">
+          <% Term.includes(:enrollments, :school).each do |term| %>
+            <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
+              <div class="flex-1">
+                <span class="text-gray-600 font-medium"><%= term.name %></span>
+                <span class="text-gray-400 text-sm block"><%= term.school.name %></span>
+              </div>
+              <span class="font-semibold"><%= term.enrollments.count %></span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <div>
+        <h3 class="text-lg font-medium mb-4">Students per Course</h3>
+        <div class="space-y-2">
+          <% Course.includes(:enrollments, :term, term: :school).each do |course| %>
+            <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
+              <div class="flex-1">
+                <span class="text-gray-600 font-medium truncate"><%= course.title %></span>
+                <span class="text-gray-400 text-sm block"><%= course.term.school.name %> - <%= course.term.name %></span>
+              </div>
+              <span class="font-semibold"><%= course.enrollments.count %></span>
+            </div>
+          <% end %>
+        </div>
+      </div>
     </div>
-
-    <!-- Add more management cards here as needed -->
   </div>
 </div> 
