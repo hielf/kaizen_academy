@@ -2,6 +2,9 @@ class CreditCardPayment < ApplicationRecord
   # TermSubscription belongs to a polymorphic payment_method.
   # CreditCardPayment is one of the types of payment_method.
   has_one :term_subscription, as: :payment_method, dependent: :nullify
+  
+  # CreditCardPayment belongs to a purchase
+  belongs_to :purchase, optional: true
 
   validates :last_four, presence: true, format: { with: /\A\d{4}\z/, message: "must be 4 digits" }
   validates :expiry_date, presence: true, format: { with: /\A(0[1-9]|1[0-2])\/\d{2}\z/, message: "must be in MM/YY format" }

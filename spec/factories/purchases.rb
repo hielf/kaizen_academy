@@ -15,5 +15,11 @@ FactoryBot.define do
       association :purchasable, factory: :course
       amount { 99.99 }
     end
+    
+    trait :with_credit_card_payment do
+      after(:create) do |purchase|
+        create(:credit_card_payment, purchase: purchase)
+      end
+    end
   end
 end

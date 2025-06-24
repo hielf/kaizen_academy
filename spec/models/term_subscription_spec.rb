@@ -58,6 +58,31 @@ RSpec.describe TermSubscription, type: :model do
         expect(Enrollment.where(term_subscription: subscription).count).to eq(2)
         expect(subscription.enrollments.pluck(:course_id)).to contain_exactly(course1.id, course2.id)
       end
+
+      context 'when student is already enrolled in some courses in the term' do
+        before do
+          # Create an existing enrollment for course1
+          create(:enrollment, student: student, course: course1, enrollment_method: 'direct_purchase')
+        end
+
+        it 'creates term subscription successfully and only enrolls in non-enrolled courses' do
+          expect {
+            create(:term_subscription, student: student, term: term)
+          }.to change(Enrollment, :count).by(1) # Only course2 should be enrolled
+        end
+
+        it 'only creates enrollments for courses the student is not already enrolled in' do
+          subscription = create(:term_subscription, student: student, term: term)
+          expect(subscription.enrollments.count).to eq(1)
+          expect(subscription.enrollments.first.course).to eq(course2)
+        end
+
+        it 'does not create duplicate enrollments for already enrolled courses' do
+          subscription = create(:term_subscription, student: student, term: term)
+          expect(student.enrollments.where(course: course1).count).to eq(1)
+          expect(student.enrollments.where(course: course2).count).to eq(1)
+        end
+      end
     end
   end
 

@@ -86,7 +86,10 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <% @terms.each do |term| %>
           <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-            <h4 class="text-lg font-semibold text-gray-900 mb-2"><%= term.name %></h4>
+            <div class="flex justify-between items-start mb-2">
+              <h4 class="text-lg font-semibold text-gray-900"><%= term.name %></h4>
+              <span class="text-green-600 font-semibold">$<%= number_with_precision(term.price, precision: 2) %></span>
+            </div>
             <div class="text-sm text-gray-600 mb-3">
               <p><strong>Start:</strong> <%= term.start_date.strftime("%B %d, %Y") %></p>
               <p><strong>End:</strong> <%= term.end_date.strftime("%B %d, %Y") %></p>
@@ -125,7 +128,10 @@
         <% @courses.each do |course| %>
           <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow flex flex-col justify-between">
             <div>
-              <h4 class="text-lg font-semibold text-gray-900 mb-2"><%= course.title %></h4>
+              <div class="flex justify-between items-start mb-2">
+                <h4 class="text-lg font-semibold text-gray-900"><%= course.title %></h4>
+                <span class="text-green-600 font-semibold">$<%= number_with_precision(course.price, precision: 2) %></span>
+              </div>
               <p class="text-sm text-gray-600 mb-3 h-16 overflow-hidden line-clamp-4 min-h-[4rem]"><%= course.description %></p>
               <div class="text-sm text-gray-500 mb-4">
                 <p><strong>Term:</strong> <%= course.term&.name || 'N/A' %></p>

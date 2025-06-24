@@ -5,6 +5,9 @@ class Purchase < ApplicationRecord
 
   # A purchase creates one enrollment
   has_one :enrollment, dependent: :destroy
+  
+  # A purchase can have one credit card payment
+  has_one :credit_card_payment, dependent: :nullify
 
   validates :student, presence: true
   validates :purchasable, presence: true
@@ -27,29 +30,40 @@ class Purchase < ApplicationRecord
   end
 
   def create_course_enrollment
-    Enrollment.find_or_create_by!(
-      student: student,
-      course: purchasable,
-      start_date: purchased_at.to_date,
-      end_date: purchased_at.to_date + 1.year, # Example: 1 year access from purchase
-      access_status: "active",
-      enrollment_method: "direct_purchase",
-      purchase: self # Link this purchase to the enrollment
-    )
+    # Skip if student is already enrolled in this course
+    return if student.enrollments.exists?(course: purchasable)
+    
+    begin
+      Enrollment.enroll!(
+        student: student,
+        course: purchasable,
+        enrollment_method: "direct_purchase",
+        purchase: self
+      )
+    rescue ActiveRecord::RecordInvalid => e
+      # Log the error
+      Rails.logger.warn("Failed to create enrollment for course #{purchasable.id}: #{e.message}")
+    end
   end
 
   def create_term_enrollment
     # For term purchases, create enrollments for all courses in the term
     purchasable.courses.each do |course|
-      Enrollment.find_or_create_by!(
-        student: student,
-        course: course,
-        start_date: purchased_at.to_date,
-        end_date: purchased_at.to_date + 1.year, # Example: 1 year access from purchase
-        access_status: "active",
-        enrollment_method: "direct_purchase",
-        purchase: self # Link this purchase to the enrollment
-      )
+      # Skip if student is already enrolled in this course
+      next if student.enrollments.exists?(course: course)
+      
+      begin
+        Enrollment.enroll!(
+          student: student,
+          course: course,
+          enrollment_method: "direct_purchase",
+          purchase: self # Example: 1 year access from purchase
+        )
+      rescue ActiveRecord::RecordInvalid => e
+        # Log the error but continue with other courses
+        Rails.logger.warn("Failed to create enrollment for course #{course.id}: #{e.message}")
+        next
+      end
     end
   end
 end

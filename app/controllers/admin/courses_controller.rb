@@ -38,6 +38,7 @@ class Admin::CoursesController < ApplicationController
     if @course.update(course_params)
       redirect_to admin_school_term_course_path(@school, @term, @course), notice: "Course was successfully updated."
     else
+      flash.now[:alert] = @course.errors.full_messages.join(", ")
       render :edit, status: :unprocessable_entity
     end
   end
@@ -68,6 +69,6 @@ class Admin::CoursesController < ApplicationController
   end
 
   def course_params
-    params.require(:course).permit(:title, :description)
+    params.require(:course).permit(:title, :price, :description)
   end
 end

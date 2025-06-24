@@ -103,24 +103,26 @@ class PaymentsController < ApplicationController
 
   def process_purchase
     ActiveRecord::Base.transaction do
+      # Always create a Purchase record regardless of purchasable type
+      purchase = Purchase.create!(
+        student: current_user,
+        purchasable: @purchasable,
+        amount: @purchasable.price,
+        purchased_at: Time.current
+      )
+      
+      # Link the credit card payment to the purchase
+      @credit_card_payment.purchase = purchase
       @credit_card_payment.save!
       
-      if @purchasable.is_a?(Course)
-        # Then create purchase
-        purchase = Purchase.create!(
-          student: current_user,
-          purchasable: @purchasable,
-          amount: @purchasable.price,
-          purchased_at: Time.current
-        )
-        
-      elsif @purchasable.is_a?(Term)
+      # If it's a Term, also create a TermSubscription
+      if @purchasable.is_a?(Term)
         TermSubscription.create!(
           term: @purchasable,
           student: current_user,
           payment_method: @credit_card_payment,
-          start_date: Time.current,
-          end_date: Time.current + 1.year, # Placeholder
+          start_date: @purchasable.start_date,
+          end_date: @purchasable.end_date,
           status: 'active',
           subscription_type: 'credit_card'
         )

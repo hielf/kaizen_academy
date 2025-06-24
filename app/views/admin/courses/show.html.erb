@@ -13,6 +13,10 @@
           <p class="text-gray-600">Description:</p>
           <p class="font-medium"><%= @course.description %></p>
         </div>
+        <div>
+          <p class="text-gray-600">Price:</p>
+          <p class="font-medium"><%= number_to_currency(@course.price) %></p>
+        </div>
       </div>
     </div>
 

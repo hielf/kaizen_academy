@@ -3,7 +3,10 @@
   <!-- Course Details -->
   <div class="bg-white rounded-lg shadow-md p-6 mb-8">
     <div class="flex items-center justify-between mb-6">
-      <h2 class="text-2xl font-bold text-gray-900">Course Information</h2>
+      <h1 class="text-3xl font-bold text-gray-900 mb-2"><%= @course.title %></h1>
+      <% unless current_user&.student? && current_user.enrollments.exists?(course_id: @course.id) %>
+        <span class="text-green-600 font-semibold text-2xl">$<%= number_with_precision(@course.price, precision: 2) %></span>
+      <% end %>
       <% if current_user&.student? && current_user.enrollments.exists?(course_id: @course.id) %>
         <% enrollment = current_user.enrollments.find_by(course_id: @course.id) %>
         <div class="flex items-center space-x-2">

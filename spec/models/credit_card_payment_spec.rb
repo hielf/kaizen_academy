@@ -49,6 +49,16 @@ RSpec.describe CreditCardPayment, type: :model do
       payment = create(:credit_card_payment)
       expect(payment.term_subscription).to be_nil
     end
+    
+    it 'belongs to a purchase' do
+      payment = create(:credit_card_payment)
+      expect(payment.purchase).to be_present
+    end
+    
+    it 'can exist without a purchase' do
+      payment = build(:credit_card_payment, purchase: nil)
+      expect(payment).to be_valid
+    end
   end
 
   describe 'callbacks' do

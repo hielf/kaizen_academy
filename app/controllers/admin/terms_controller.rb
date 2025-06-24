@@ -63,6 +63,6 @@ class Admin::TermsController < ApplicationController
   end
 
   def term_params
-    params.require(:term).permit(:name, :start_date, :end_date)
+    params.require(:term).permit(:name, :price, :start_date, :end_date)
   end
 end

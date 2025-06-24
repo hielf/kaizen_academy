@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_22_091038) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_24_083711) do
   create_table "courses", force: :cascade do |t|
     t.string "title", null: false
     t.text "description", null: false
@@ -32,6 +32,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_22_091038) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "transaction_id"
+    t.integer "purchase_id"
+    t.index ["purchase_id"], name: "index_credit_card_payments_on_purchase_id"
   end
 
   create_table "enrollments", force: :cascade do |t|
@@ -138,6 +140,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_22_091038) do
 
   add_foreign_key "courses", "schools"
   add_foreign_key "courses", "terms"
+  add_foreign_key "credit_card_payments", "purchases"
   add_foreign_key "enrollments", "courses"
   add_foreign_key "enrollments", "purchases"
   add_foreign_key "enrollments", "term_subscriptions"

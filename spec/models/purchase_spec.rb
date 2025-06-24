@@ -8,6 +8,7 @@ RSpec.describe Purchase, type: :model do
     # When a Term is purchased, multiple enrollments can be created.
     # This association will only return one of them.
     it { should have_one(:enrollment).dependent(:destroy) }
+    it { should have_one(:credit_card_payment).dependent(:nullify) }
   end
 
   describe 'validations' do
@@ -58,6 +59,32 @@ RSpec.describe Purchase, type: :model do
           expect(enrollments.map(&:student).uniq).to eq([student])
           expect(enrollments.map(&:course)).to contain_exactly(course1, course2)
           expect(enrollments.map(&:purchase).uniq).to eq([purchase])
+        end
+
+        context 'when student is already enrolled in some courses in the term' do
+          before do
+            # Create an existing enrollment for course1
+            create(:enrollment, student: student, course: course1, enrollment_method: 'admin_override')
+          end
+
+          it 'creates term purchase successfully and only enrolls in non-enrolled courses' do
+            expect {
+              create(:purchase, student: student, purchasable: term)
+            }.to change(Enrollment, :count).by(1) # Only course2 should be enrolled
+          end
+
+          it 'only creates enrollments for courses the student is not already enrolled in' do
+            purchase = create(:purchase, student: student, purchasable: term)
+            new_enrollments = Enrollment.where(purchase: purchase)
+            expect(new_enrollments.count).to eq(1)
+            expect(new_enrollments.first.course).to eq(course2)
+          end
+
+          it 'does not create duplicate enrollments for already enrolled courses' do
+            purchase = create(:purchase, student: student, purchasable: term)
+            expect(student.enrollments.where(course: course1).count).to eq(1)
+            expect(student.enrollments.where(course: course2).count).to eq(1)
+          end
         end
       end
 

@@ -17,6 +17,10 @@
           <p class="text-gray-600">End Date:</p>
           <p class="font-medium"><%= @term.end_date.strftime("%B %d, %Y") %></p>
         </div>
+        <div>
+          <p class="text-gray-600">Price:</p>
+          <p class="font-medium"><%= number_to_currency(@term.price) %></p>
+        </div>
       </div>
     </div>
 

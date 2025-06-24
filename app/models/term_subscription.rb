@@ -33,12 +33,21 @@ class TermSubscription < ApplicationRecord
   # Create enrollments for all courses associated with the subscribed term
   def create_term_enrollments
     term.courses.each do |course|
-      Enrollment.enroll!(
-        student: student,
-        course: course,
-        enrollment_method: subscription_type == "license" ? "term_subscription_license" : "term_subscription_credit_card",
-        term_subscription: self
-      )
+      # Skip if student is already enrolled in this course
+      next if student.enrollments.exists?(course: course)
+      
+      begin
+        Enrollment.enroll!(
+          student: student,
+          course: course,
+          enrollment_method: subscription_type == "license" ? "term_subscription_license" : "term_subscription_credit_card",
+          term_subscription: self
+        )
+      rescue ActiveRecord::RecordInvalid => e
+        # Log the error but continue with other courses
+        Rails.logger.warn("Failed to create enrollment for course #{course.id}: #{e.message}")
+        next
+      end
     end
     # term.courses.each do |course|
     #   Enrollment.find_or_create_by!(

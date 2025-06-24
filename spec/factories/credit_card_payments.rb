@@ -5,5 +5,8 @@ FactoryBot.define do
     card_type { 'Visa' }
     processed_at { Time.zone.now }
     transaction_id { "txn_#{SecureRandom.alphanumeric(24).downcase}" }
+    
+    # Optional association with purchase
+    association :purchase, factory: :purchase
   end
 end
