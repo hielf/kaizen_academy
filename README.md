@@ -56,6 +56,9 @@ Kaizen Academy is a Ruby on Rails application designed to provide a platform for
 6. Open your browser and navigate to `http://localhost:3000` to view the application.
    - Username: admin@school.com
    - Password: 123456
+   or 
+   - Student Username: test@school.com
+   - Password: 123456
 
 ### Running Tests
 
