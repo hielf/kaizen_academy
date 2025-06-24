@@ -28,7 +28,7 @@ Kaizen Academy is a Ruby on Rails application designed to provide a platform for
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/hielf/kaizen_academy.git
    cd kaizen_academy
    ```
 
