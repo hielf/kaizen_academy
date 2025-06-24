@@ -4,7 +4,7 @@ class CoursePolicy < ApplicationPolicy
   end
 
   def show?
-    user.admin? || (user.student? && user.school == record.school && record.term.school == user.school)
+    user.admin? || (user.student? && user.school == record.term.school)
   end
 
   def create?

@@ -42,35 +42,23 @@ class User < ApplicationRecord
 
   def email_format_validation
     return if email.blank?
-    
-    # More strict email validation
-    email_regex = /\A[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\z/
-    
-    unless email.match?(email_regex)
+
+    local_part, domain = email.split('@')
+
+    if local_part.blank? || domain.blank?
       errors.add(:email, "must be a valid email address")
       return
     end
-    
-    # Additional checks for more realistic email addresses
-    local_part, domain = email.split('@')
-    
-    # Local part should be at least 2 characters
+
     if local_part.length < 2
       errors.add(:email, "local part must be at least 2 characters")
-      return
     end
-    
-    # Domain should have at least one dot and proper structure
+
     domain_parts = domain.split('.')
-    if domain_parts.length < 2 || domain_parts.last.length < 2
+    if domain_parts.length < 2 || domain_parts.any?(&:empty?)
       errors.add(:email, "domain must be properly formatted (e.g., example.com)")
-      return
-    end
-    
-    # Domain extension should be at least 2 characters
-    if domain_parts.last.length < 2
+    elsif domain_parts.last.length < 2
       errors.add(:email, "domain extension must be at least 2 characters")
-      return
     end
   end
 end

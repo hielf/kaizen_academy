@@ -5,8 +5,8 @@ class Course < ApplicationRecord
   # Using has_and_belongs_to_many with Term.
   belongs_to :term
 
-  has_many :enrollments, dependent: :destroy # Students enroll in courses
-  has_many :purchases, as: :purchasable, dependent: :destroy # Courses can be directly purchased
+  has_many :enrollments, dependent: :restrict_with_error # Students enroll in courses
+  has_many :purchases, as: :purchasable, dependent: :restrict_with_error # Courses can be directly purchased
 
   validates :title, presence: true
   validates :description, presence: true
@@ -15,22 +15,7 @@ class Course < ApplicationRecord
   # Ensure course titles are unique per school
   validates :title, uniqueness: { scope: :school_id, message: "already exists for this school" }
 
-  before_destroy :check_for_associated_records
-
   def self.ransackable_attributes(auth_object = nil)
     # ... existing code ...
-  end
-
-  private
-
-  def check_for_associated_records
-    if enrollments.exists?
-      errors.add(:base, "Cannot delete course with associated enrollments")
-      throw(:abort)
-    end
-    if purchases.exists?
-      errors.add(:base, "Cannot delete course with associated purchases")
-      throw(:abort)
-    end
   end
 end

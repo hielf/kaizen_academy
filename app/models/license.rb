@@ -21,7 +21,7 @@ class License < ApplicationRecord
   # Callbacks for status management
   before_validation :set_default_status, on: :create
   before_validation :generate_unique_code, on: :create
-  before_update :set_redeemed_at_if_status_changed_to_redeemed
+  before_validation :set_redeemed_at_if_status_changed_to_redeemed, on: :update
 
   # Helper methods for status checks
   def active?

@@ -7,9 +7,9 @@ class Term < ApplicationRecord
   # a `CourseOffering` join model might be preferred.
   has_many :courses, dependent: :restrict_with_error
 
-  has_many :term_subscriptions, dependent: :destroy # Subscriptions for this term
+  has_many :term_subscriptions, dependent: :restrict_with_error # Subscriptions for this term
   has_many :students, through: :term_subscriptions
-  has_many :purchases, as: :purchasable, dependent: :destroy # Terms can be directly purchased
+  has_many :purchases, as: :purchasable, dependent: :restrict_with_error # Terms can be directly purchased
 
   validates :name, presence: true
   validates :start_date, presence: true
@@ -21,7 +21,7 @@ class Term < ApplicationRecord
   validates :name, uniqueness: { scope: :school_id, message: "already exists for this school" }
 
   has_many :enrollments, through: :courses
-  has_many :licenses, dependent: :destroy
+  has_many :licenses, dependent: :restrict_with_error
 
   # Scopes for filtering terms
   scope :available, -> { where("end_date > ?", Time.zone.now) }
@@ -30,31 +30,8 @@ class Term < ApplicationRecord
   scope :expired, -> { where("end_date <= ?", Time.zone.now) }
   scope :for_school, ->(school) { where(school: school) }
 
-  before_destroy :check_for_associated_records
-
   # Helper to check if the term is currently available
   def available?
     end_date > Time.zone.now
-  end
-
-  private
-
-  def check_for_associated_records
-    if enrollments.exists?
-      errors.add(:base, "Cannot delete term with associated enrollments")
-      throw(:abort)
-    end
-    if term_subscriptions.exists?
-      errors.add(:base, "Cannot delete term with associated term subscriptions")
-      throw(:abort)
-    end
-    if purchases.exists?
-      errors.add(:base, "Cannot delete term with associated purchases")
-      throw(:abort)
-    end
-    if licenses.exists?
-      errors.add(:base, "Cannot delete term with associated licenses")
-      throw(:abort)
-    end
   end
 end
